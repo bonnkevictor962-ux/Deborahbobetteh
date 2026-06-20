@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>For Deborah, from Bonnke 💛</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,wght@1,500;1,600&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --wine: #2C0A1E;
+    --wine-deep: #190512;
+    --rose: #FF7AA8;
+    --rose-soft: #FFB6CE;
+    --gold: #F4C869;
+    --paper: #FFF4EC;
+    --maroon: #4A1029;
+    --forgive: #3ECF8E;
+    --forgive-glow: rgba(62, 207, 142, .55);
+  }
+
+  *{ box-sizing: border-box; }
+
+  html, body{
+    margin:0; padding:0; height:100%;
+    background: radial-gradient(circle at 50% 0%, var(--wine) 0%, var(--wine-deep) 70%);
+    font-family: 'Outfit', sans-serif;
+    color: var(--paper);
+    overflow-x: hidden;
+  }
+
+  body{
+    min-height: 100dvh;
+    position: relative;
+  }
+
+  button{ font-family: inherit; border: none; cursor: pointer; background: none; color: inherit; }
+  button:focus-visible{ outline: 3px solid var(--gold); outline-offset: 3px; }
+
+  /* ---------- Ambient hearts ---------- */
+  .ambient{
+    position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0;
+  }
+  .ambient span{
+    position: absolute; bottom: -10%;
+    font-size: 1.4rem; opacity: .35; filter: blur(.2px);
+    animation: floatUp linear forwards;
+  }
+  @keyframes floatUp{
+    to{ transform: translate(var(--drift), -120vh) rotate(20deg); opacity: 0; }
+  }
+
+  /* ---------- Scene stage ---------- */
+  #app{
+    position: relative; z-index: 1;
+    min-height: 100dvh;
+    display: grid;
+  }
+  .scene{
+    grid-area: 1 / 1;
+    min-height: 100dvh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 6vh 5vw;
+    text-align: center;
+    opacity: 0; pointer-events: none; transform: scale(.98);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .scene.active{ opacity: 1; pointer-events: auto; transform: scale(1); }
+
+  /* ---------- Scene 1: the letter ---------- */
+  .letter-card{
+    background: var(--paper);
+    color: var(--maroon);
+    max-width: 560px; width: 100%;
+    border-radius: 18px;
+    padding: clamp(28px, 6vw, 52px) clamp(22px, 6vw, 48px);
+    box-shadow: 0 30px 60px rgba(0,0,0,.45);
+    transform: rotate(-1.2deg);
+  }
+  .handwritten{
+    font-family: 'Caveat', cursive;
+    font-size: clamp(2.4rem, 9vw, 4.6rem);
+    line-height: 1;
+    margin: 0 0 6px;
+    color: var(--maroon);
+  }
+  .char{
+    display: inline-block; opacity: 0;
+    transform: translateY(16px) rotate(-4deg);
+    animation: inkReveal .55s ease forwards;
+    animation-delay: calc(var(--i) * 45ms);
+  }
+  @keyframes inkReveal{ to{ opacity: 1; transform: translateY(0) rotate(0); } }
+
+  .ink-underline{ display:block; width: clamp(160px, 40vw, 240px); margin: 0 auto 18px; }
+  .ink-underline path{
+    fill: none; stroke: var(--rose); stroke-width: 7; stroke-linecap: round;
+    stroke-dasharray: 280; stroke-dashoffset: 280;
+    animation: draw .7s ease forwards; animation-delay: 1.05s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+
+  .apology-text{
+    font-size: clamp(1rem, 2.4vw, 1.18rem);
+    line-height: 1.7;
+    max-width: 46ch; margin: 0 auto 30px;
+    opacity: 0;
+    animation: fadeUp .8s ease forwards; animation-delay: 1.3s;
+  }
+  @keyframes fadeUp{ from{ opacity:0; transform: translateY(10px);} to{ opacity:1; transform: translateY(0);} }
+
+  .seal-btn{
+    opacity: 0;
+    animation: fadeUp .8s ease forwards; animation-delay: 1.7s;
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--wine);
+    color: var(--paper);
+    padding: 14px 26px;
+    border-radius: 999px;
+    font-weight: 500; font-size: clamp(.95rem, 2vw, 1.05rem);
+    box-shadow: 0 10px 24px rgba(44,10,30,.45);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .seal-btn:hover{ transform: translateY(-2px); box-shadow: 0 14px 28px rgba(44,10,30,.55); }
+  .seal-btn:active{ transform: translateY(0) scale(.96); }
+  .seal-btn__icon{ font-size: 1.2rem; }
+
+  /* ---------- Scene 2: love stack ---------- */
+  .love-stack{ margin-bottom: 36px; }
+  .love-row{
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: clamp(1.9rem, 7vw, 3.2rem);
+    line-height: 1.25;
+    color: var(--paper);
+    text-shadow: 0 0 24px rgba(255,122,168,.55);
+    opacity: 0; transform: translateY(14px) scale(.92);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  .love-row.show{ opacity: 1; transform: translateY(0) scale(1); }
+  .love-row--emoji{ font-style: normal; font-size: clamp(2.4rem, 9vw, 4rem); }
+
+  /* ---------- Modal ---------- */
+  .modal-overlay{
+    position: fixed; inset: 0; z-index: 50;
+    background: rgba(25, 5, 18, .72);
+    backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s ease;
+    padding: 5vw;
+  }
+  .modal-overlay.active{ opacity: 1; pointer-events: auto; }
+
+  .modal-card{
+    background: var(--paper); color: var(--maroon);
+    width: min(420px, 92vw);
+    border-radius: 20px;
+    padding: clamp(26px, 5vw, 38px) clamp(20px, 5vw, 32px) 30px;
+    text-align: center;
+    box-shadow: 0 30px 70px rgba(0,0,0,.5);
+    transform: scale(.9); transition: transform .35s ease;
+  }
+  .modal-overlay.active .modal-card{ transform: scale(1); }
+
+  .modal-card h2{
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: clamp(1.5rem, 5vw, 2rem);
+    margin: 0 0 8px;
+  }
+  .modal-card .modal-sub{ font-size: .95rem; opacity: .75; margin: 0 0 18px; }
+
+  .modal-buttons{ position: relative; width: 100%; height: 170px; }
+
+  .yes-btn, .no-btn{
+    position: absolute; top: 50%; transform: translate(-50%, -50%);
+    min-width: 96px; padding: 14px 0; border-radius: 999px;
+    font-weight: 600; font-size: 1.05rem; letter-spacing: .03em;
+  }
+
+  .yes-btn{
+    left: 28%;
+    background: var(--forgive); color: #0c2e1f;
+    animation: pulseGlow 1.4s ease-in-out infinite;
+  }
+  @keyframes pulseGlow{
+    0%, 100%{ box-shadow: 0 0 0 0 var(--forgive-glow); transform: translate(-50%,-50%) scale(1); }
+    50%{ box-shadow: 0 0 0 14px rgba(62,207,142,0); transform: translate(-50%,-50%) scale(1.06); }
+  }
+
+  .no-btn{
+    left: 72%;
+    background: #fff; color: var(--maroon);
+    border: 2px solid var(--maroon);
+    transition: left .22s cubic-bezier(.34,1.56,.64,1), top .22s cubic-bezier(.34,1.56,.64,1), transform .15s ease;
+  }
+
+  .dodge-caption{
+    min-height: 1.4em; margin-top: 6px;
+    font-size: .92rem; opacity: .8;
+  }
+
+  /* ---------- Scene 4: celebration ---------- */
+  .celebrate-card h1{
+    font-family: 'Fraunces', serif; font-style: italic;
+    font-size: clamp(2.2rem, 8vw, 4rem);
+    margin: 0 0 6px;
+    background: linear-gradient(90deg, var(--gold), var(--rose-soft));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .celebrate-card .ink-underline path{ stroke: var(--gold); }
+  .celebrate-card p{
+    font-size: clamp(1rem, 2.6vw, 1.2rem); max-width: 42ch; margin: 14px auto 0; line-height: 1.7;
+  }
+  .confetti-layer{ position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 2; }
+  .confetti-layer span{
+    position: absolute; top: -8%; font-size: 1.6rem;
+    animation: fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform: translate(var(--drift), 120vh) rotate(360deg); opacity: .9; }
+  }
+
+  /* ---------- Responsive tweaks ---------- */
+  @media (max-width: 480px){
+    .modal-buttons{ height: 210px; }
+    .yes-btn{ left: 30%; }
+    .no-btn{ left: 70%; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .char, .apology-text, .seal-btn, .love-row, .ink-underline path{ animation: none !important; opacity: 1 !important; transform: none !important; stroke-dashoffset: 0 !important; }
+    .yes-btn{ animation: none; }
+    .scene{ transition: none; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="ambient" id="ambient" aria-hidden="true"></div>
+
+  <main id="app">
+
+    <section class="scene active" id="scene1">
+      <div class="letter-card">
+        <h1 class="handwritten" id="nameAnim" aria-label="Bonnke is sorry"></h1>
+        <svg class="ink-underline" viewBox="0 0 240 20" aria-hidden="true">
+          <path d="M6 12 C 60 2, 180 2, 234 12"/>
+        </svg>
+        <p class="apology-text">
+          Dear Deborah, I know I let you down, and I'm truly sorry. Our friendship
+          means a lot to me, more than I've probably ever said, and I hate that
+          something I did made you hurt. I'd really love the chance to make this right.
+          Will you walk through this little letter with me?
+        </p>
+        <button class="seal-btn" id="toScene2">
+          <span class="seal-btn__icon">💌</span>
+          <span class="seal-btn__label">Open the next page</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="scene" id="scene2">
+      <div class="love-stack">
+        <div class="love-row love-row--emoji">💛</div>
+        <div class="love-row">Bonnke</div>
+        <div class="love-row">is</div>
+        <div class="love-row">sorry</div>
+        <div class="love-row love-row--emoji">💛</div>
+      </div>
+      <button class="seal-btn" id="toScene3">
+        <span class="seal-btn__icon">💞</span>
+        <span class="seal-btn__label">Click to see what's next</span>
+      </button>
+    </section>
+
+    <section class="scene" id="scene4">
+      <div class="celebrate-card">
+        <h1 id="yesHeading">She said YES 💛</h1>
+        <svg class="ink-underline" viewBox="0 0 240 20" aria-hidden="true">
+          <path d="M6 12 C 60 2, 180 2, 234 12"/>
+        </svg>
+        <p>Thank you, Deborah. That means everything to Bonnke. 🥹💛<br>
+        Promise made, lesson learned — thank you for giving this another chance.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="modal-overlay" id="modal">
+    <div class="modal-card">
+      <h2>Do you forgive Bonnke?</h2>
+      <p class="modal-sub">Be honest… but maybe also be kind 💌</p>
+      <div class="modal-buttons" id="modalButtons">
+        <button class="yes-btn" id="yesBtn">YES</button>
+        <button class="no-btn" id="noBtn">NO</button>
+      </div>
+      <p class="dodge-caption" id="dodgeCaption"></p>
+    </div>
+  </div>
+
+  <div class="confetti-layer" id="confetti" aria-hidden="true"></div>
+
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---- handwritten name ---- */
+  function buildHandwritten(el, text){
+    el.innerHTML = '';
+    text.split('').forEach((ch, i) => {
+      const span = document.createElement('span');
+      span.className = 'char';
+      span.textContent = ch === ' ' ? '\u00A0' : ch;
+      span.style.setProperty('--i', i);
+      el.appendChild(span);
+    });
+  }
+  buildHandwritten(document.getElementById('nameAnim'), 'Bonnke is sorry');
+
+  /* ---- ambient floating hearts ---- */
+  const ambient = document.getElementById('ambient');
+  const ambientEmojis = ['🤍', '💗', '✨'];
+  function spawnAmbient(){
+    const s = document.createElement('span');
+    s.textContent = ambientEmojis[Math.floor(Math.random() * ambientEmojis.length)];
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
+    s.style.animationDuration = (6 + Math.random() * 5) + 's';
+    s.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+    ambient.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+  if (!reduceMotion){
+    setInterval(spawnAmbient, 700);
+  }
+
+  /* ---- scene switching ---- */
+  function showScene(id){
+    document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    if (id === 'scene2') revealLoveStack();
+  }
+
+  function revealLoveStack(){
+    const rows = document.querySelectorAll('#scene2 .love-row');
+    rows.forEach(r => r.classList.remove('show'));
+    rows.forEach((r, i) => setTimeout(() => r.classList.add('show'), 150 + i * 220));
+  }
+
+  document.getElementById('toScene2').addEventListener('click', () => showScene('scene2'));
+  document.getElementById('toScene3').addEventListener('click', openModal);
+
+  /* ---- modal + dodging NO button ---- */
+  const modal = document.getElementById('modal');
+  const modalButtons = document.getElementById('modalButtons');
+  const noBtn = document.getElementById('noBtn');
+  const yesBtn = document.getElementById('yesBtn');
+  const dodgeCaption = document.getElementById('dodgeCaption');
+
+  let modalActive = false;
+  let dodgeCount = 0;
+  let lastDodgeTime = 0;
+
+  const dodgeMessages = [
+    'Aww, nice try 😄',
+    "Bonnke's NO button is camera-shy 🙈",
+    "It really doesn't want to be clicked 😅",
+    'Maybe the YES button is easier? 💛',
+    "It's not happening, but it's fun watching you try 😂"
+  ];
+
+  function openModal(){
+    modal.classList.add('active');
+    modalActive = true;
+    dodgeCount = 0;
+    dodgeCaption.textContent = '';
+    noBtn.style.left = '';
+    noBtn.style.top = '';
+    noBtn.style.transform = '';
+  }
+  function closeModal(){
+    modal.classList.remove('active');
+    modalActive = false;
+  }
+
+  function getDodgeRadius(){
+    return Math.max(70, Math.min(130, window.innerWidth * 0.25));
+  }
+
+  function moveNoButton(){
+    const containerRect = modalButtons.getBoundingClientRect();
+    const btnRect = noBtn.getBoundingClientRect();
+    const padding = 8;
+    const maxLeft = Math.max(containerRect.width - btnRect.width - padding, padding);
+    const maxTop = Math.max(containerRect.height - btnRect.height - padding, padding);
+    const newLeft = padding + Math.random() * (maxLeft - padding);
+    const newTop = padding + Math.random() * (maxTop - padding);
+    noBtn.style.transform = 'none';
+    noBtn.style.left = newLeft + 'px';
+    noBtn.style.top = newTop + 'px';
+    dodgeCount++;
+    dodgeCaption.textContent = dodgeMessages[Math.min(dodgeCount - 1, dodgeMessages.length - 1)];
+  }
+
+  function handlePointerMove(e){
+    if (!modalActive) return;
+    const now = Date.now();
+    if (now - lastDodgeTime < 120) return;
+    const rect = noBtn.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+    if (Math.sqrt(dx * dx + dy * dy) < getDodgeRadius()){
+      lastDodgeTime = now;
+      moveNoButton();
+    }
+  }
+
+  document.addEventListener('pointermove', handlePointerMove);
+  noBtn.addEventListener('pointerdown', (e) => { e.preventDefault(); moveNoButton(); });
+  noBtn.addEventListener('focus', () => { moveNoButton(); noBtn.blur(); });
+  noBtn.addEventListener('click', (e) => e.preventDefault());
+
+  yesBtn.addEventListener('click', () => {
+    notifyYes();
+    closeModal();
+    showScene('scene4');
+    startConfetti();
+  });
+
+  /* ---- push notification when she says YES ----
+     Uses ntfy.sh, a free no-signup push service.
+     Subscribe to this exact topic name in the ntfy app to get notified. */
+  const NTFY_TOPIC = 'bonnke-deborah-yes-x7q2m9';
+
+  function notifyYes(){
+    fetch('https://ntfy.sh/' + NTFY_TOPIC, {
+      method: 'POST',
+      body: 'Deborah said YES! She forgives Bonnke 💛'
+    }).catch(() => { /* fails silently, the page still works either way */ });
+  }
+
+  /* ---- celebration confetti ---- */
+  const confettiLayer = document.getElementById('confetti');
+  const confettiEmojis = ['💛', '💖', '✨', '🎉', '🥳', '💞'];
+  let confettiInterval = null;
+  let confettiSpawned = 0;
+
+  function spawnConfettiPiece(){
+    const s = document.createElement('span');
+    s.textContent = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
+    s.style.left = Math.random() * 100 + 'vw';
+    s.style.setProperty('--drift', (Math.random() * 120 - 60) + 'px');
+    s.style.animationDuration = (3.5 + Math.random() * 3) + 's';
+    s.style.fontSize = (1.2 + Math.random() * 1.4) + 'rem';
+    confettiLayer.appendChild(s);
+    s.addEventListener('animationend', () => s.remove());
+  }
+
+  function startConfetti(){
+    if (confettiInterval) return;
+    confettiSpawned = 0;
+    const rate = reduceMotion ? 1 : 4;
+    confettiInterval = setInterval(() => {
+      for (let i = 0; i < rate; i++) spawnConfettiPiece();
+      confettiSpawned++;
+      if (confettiSpawned > 25){
+        clearInterval(confettiInterval);
+        confettiInterval = null;
+      }
+    }, 250);
+  }
+})();
+</script>
+
+</body>
+</html>
